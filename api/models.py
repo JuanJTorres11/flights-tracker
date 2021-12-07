@@ -1,3 +1,28 @@
 from django.db import models
 
-# Create your models here.
+
+class Agent(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    rating = models.DecimalField(max_digits=3, decimal_places=1)
+
+class Airline(models.Model):
+    id = models.CharField(max_length=2, primary_key=True)
+    name = models.CharField(max_length=50, unique=True)
+
+class Airport(models.Model):
+    code = models.CharField(max_length=3, primary_key=True)
+class Leg(models.Model):
+    id = models.CharField(max_length=10, primary_key=True)
+    departure_airport = models.ForeignKey(Airport, related_name='departure_legs', on_delete=models.PROTECT)
+    arrival_airport = models.ForeignKey(Airport, related_name='arrival_legs',on_delete=models.PROTECT)
+    departure_time = models.DateTimeField()
+    arrival_time = models.DateTimeField()
+    stops = models.PositiveSmallIntegerField()
+    airline = models.ForeignKey(Airline, on_delete=models.PROTECT)
+    duration_mins = models.PositiveSmallIntegerField()
+
+class Itinerary(models.Model):
+    id = models.CharField(max_length=10, primary_key=True)
+    price = models.PositiveSmallIntegerField()
+    agent = models.ForeignKey(Agent, on_delete=models.PROTECT)
+    legs = models.ManyToManyField(Leg)
