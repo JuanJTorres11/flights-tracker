@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib import admin
 
 
 class Agent(models.Model):
@@ -23,8 +24,18 @@ class Leg(models.Model):
     airline = models.ForeignKey(Airline, on_delete=models.PROTECT)
     duration_mins = models.PositiveSmallIntegerField()
 
+    def __str__(self):
+        return f"{self.id}"
+
 class Itinerary(models.Model):
     id = models.CharField(max_length=10, primary_key=True)
     price = models.CharField(max_length=10)
     agent = models.ForeignKey(Agent, on_delete=models.PROTECT)
     legs = models.ManyToManyField(Leg)
+
+    @admin.display
+    def leg1(self):
+        return self.legs.all()[0]
+    @admin.display
+    def leg2(self):
+        return self.legs.all()[1]
