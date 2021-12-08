@@ -4,7 +4,9 @@ from django.db import models
 class Agent(models.Model):
     name = models.CharField(max_length=50, unique=True)
     rating = models.DecimalField(max_digits=3, decimal_places=1)
-
+    
+    def __str__(self):
+        return f"{self.name}"
 class Airline(models.Model):
     id = models.CharField(max_length=2, primary_key=True)
     name = models.CharField(max_length=50, unique=True)
@@ -23,6 +25,6 @@ class Leg(models.Model):
 
 class Itinerary(models.Model):
     id = models.CharField(max_length=10, primary_key=True)
-    price = models.PositiveSmallIntegerField()
+    price = models.CharField(max_length=10)
     agent = models.ForeignKey(Agent, on_delete=models.PROTECT)
     legs = models.ManyToManyField(Leg)
